@@ -246,17 +246,17 @@ function SearchBook({ err, ListBookData, indexBookList }) {
             ) : (
               <>
                 <h1 className="text-xl underline text-white font-serif font-bold ">TITLE</h1>
-                <h1 className="text-3xl text-orange-400 w-full block   text-center">{bookListResult[indexBookList].Title.toUpperCase()}</h1>
+                <h1 className="text-3xl text-orange-400 w-full block   text-center">{bookListResult[indexBookList].titles.toUpperCase()}</h1>
                 <h1 className="text-xl underline text-white font-serif font-bold">AUTHOR</h1>
-                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].Author.toUpperCase()}</h1>
+                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].authors.toUpperCase()}</h1>
                 <h1 className="text-xl underline text-white font-serif font-bold">EDITION</h1>
-                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].Edition.toUpperCase()}</h1>
+                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].editions.toUpperCase()}</h1>
                 <h1 className="text-xl underline text-white font-serif font-bold">YEAR</h1>
-                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].Year.toUpperCase()}</h1>
+                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].year.toUpperCase()}</h1>
                 <h1 className="text-xl underline text-white font-serif font-bold">LANGUAGE</h1>
-                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].Language.toUpperCase()}</h1>
+                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].languages.toUpperCase()}</h1>
                 <h1 className="text-xl underline text-white font-serif font-bold">AVAILABILITY</h1>
-                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].Availability.toUpperCase()}</h1>
+                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].availability.toUpperCase()}</h1>
               </>
             )}
           </div>
