@@ -258,11 +258,7 @@ function SearchBook({ err, ListBookData, indexBookList }) {
               <>
                 {bookListResult.map((book, index) => (
                   <div key={index} className={`relative w-[22%] h-3/4 border-[3px] bg-slate-500 ${bookIndexAt === index ? " border-red-600" : "border-white"}`}>
-                    <img
-                      src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/art-book-cover-design-template-34323b0f0734dccded21e0e3bebf004c_screen.jpg?ts=1637015198"
-                      alt=""
-                      className="absolute bg-contain w-full h-full"
-                    />
+                    <img src={book.BookCoverUri} alt="" className="absolute bg-contain w-full h-full" />
                   </div>
                 ))}
               </>
