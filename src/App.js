@@ -7,6 +7,7 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import BookCoverSwap from "./component/BooksCoverSwap.js";
 import { VirtualBrailleDisplay } from "./component/VirtualBrailleDisplay";
 import bg from "./asset/mountains.svg";
+import binusBg from "./asset/logoBinus.png";
 import { LoadingAnimation } from "./component/loadingComponent";
 
 const NotVisible = VisibilityOffOutlinedIcon;
@@ -34,7 +35,9 @@ function App() {
   }, []);
 
   return (
-    <main className="h-screen w-screen  bg-fixed bg-center bg-cover bg-no-repeat" style={{ backgroundImage: `url(${bg})` }}>
+    <main className="h-screen w-screen  bg-fixed bg-center bg-cover bg-no-repeat relative" style={{ backgroundImage: `url(${bg})` }}>
+      {dataFromRust !== undefined && <img src={binusBg} alt="" className="absolute w-[10%] h-[10%] mt-3 ml-3 z-[999]" />}
+
       {dataFromRust === undefined ? (
         <>
           <WaitMode />
@@ -143,7 +146,7 @@ function SearchBook({ err, ListBookData, indexBookList }) {
   const [bookTitle, setBookTitle] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [bookIndexAt, setBookIndexAt] = useState(indexBookList);
-  const [errorState, setErrorState] = useState(err);
+  const [errorState, setErrorState] = useState(true);
   const scrollBar = useRef(null);
 
   function toRust(data, status) {
@@ -163,11 +166,11 @@ function SearchBook({ err, ListBookData, indexBookList }) {
 
   useEffect(() => {
     setIsLoading(false);
-    setTimeout(() => {
-      setErrorState(false);
-      invoke("reset_error_state_from_ui_search");
-      setBookTitle("");
-    }, 2500);
+    if (errorState)
+      setTimeout(() => {
+        setErrorState(false);
+        invoke("reset_error_state_from_ui_search");
+      }, 2500);
   }, [errorState]);
 
   useEffect(() => {
@@ -179,37 +182,69 @@ function SearchBook({ err, ListBookData, indexBookList }) {
 
   return (
     <>
-      <div className="h-full w-full  flex  flex-col items-center ">
-        <div className="w-[460px] h-24 bg-blue-100 bg-opacity-10 border-2 border-slate-800 border-opacity-50 rounded-xl relative flex flex-col justify-start items-center mt-20">
-          <h1 className="absolute top-[-50px] text-center pl-1 w-full text-indigo-800 text-4xl">Search Book</h1>
-          <p className="font-semibold text-2xl text-center  mt-2 cursor-default text-indigo-500">Title</p>
-          <input
-            type="text"
-            className=" text-2xl text-center mt-1 border-b-2 border-black w-[90%] cursor-default bg-transparent focus:outline-none"
-            autoFocus
-            value={bookTitle}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                console.log(bookTitle);
-                toRust(bookTitle, true);
-                setIsLoading(true);
-                setTimeout(() => {
-                  toRust(bookTitle, false);
-                }, 500);
-                timeoutID = setTimeout(() => {
-                  if (ListBookData.length === 0) setErrorState(true);
-                }, 7500);
-              }
-            }}
-            onChange={(e) => {
-              setBookTitle(e.target.value);
-              setErrorState(false);
-            }}
-          />
+      <div className="h-full w-full p-10 gap-5 flex flex-col ">
+        <div className="w-full h-80  relative flex  justify-start items-center gap-3">
+          <div className="w-4/6 h-full  bg-black/70 border-2 border-slate-800 border-opacity-50 rounded-xl relative flex flex-col justify-center items-center">
+            <div className=" w-[80%] h-auto bg-slate-50/20 flex flex-col justify-center items-center rounded-lg p-2 border-2 border-orange-500">
+              <h1 className="absolute top-[40px] text-center pl-1 w-full text-indigo-300 text-4xl">Search Book</h1>
+              <p className="font-semibold text-2xl text-center  mt-2 cursor-default text-indigo-300">Title</p>
+              <input
+                type="text"
+                className=" text-2xl text-center mt-1 border-b-2 border-black w-[90%] cursor-default bg-transparent focus:outline-none text-white"
+                autoFocus
+                value={bookTitle}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    console.log(bookTitle);
+                    toRust(bookTitle, true);
+                    setIsLoading(true);
+                    setTimeout(() => {
+                      toRust(bookTitle, false);
+                    }, 500);
+                    timeoutID = setTimeout(() => {
+                      if (ListBookData.length === 0) setErrorState(true);
+                    }, 7500);
+                  }
+                }}
+                onChange={(e) => {
+                  setBookTitle(e.target.value);
+                  setErrorState(false);
+                }}
+              />
+            </div>
+          </div>
+          <div className="grow h-full bg-blue-800 bg-opacity-10 border-2 border-slate-800 border-opacity-50 rounded-xl relative p-9 pt-12 text-">
+            <h1 className="font-bold text-xl">Button Information:</h1>
+            <p>
+              <span className="font-bold">Tombol 1 :</span> Halaman Utama
+            </p>
+            <p>
+              <span className="font-bold">Tombol 6 :</span> Menampilkan Judul Buku
+            </p>
+            <p>
+              <span className="font-bold">Tombol 7 :</span> Menampilkan Ketikkan Pengguna
+            </p>
+            <p>
+              <span className="font-bold">Tombol 24 :</span> Baca Buku
+            </p>
+            <p>
+              <span className="font-bold">Tombol Atas :</span> Buku Sebelumnya
+            </p>
+            <p>
+              <span className="font-bold">Tombol Bawah :</span> Buku Selanjutnya
+            </p>
+            <p>
+              <span className="font-bold">Tombol Kiri :</span> Tab Kiri
+            </p>
+            <p>
+              <span className="font-bold">Tombol Kanan :</span> Tab Kanan
+            </p>
+          </div>
         </div>
-        <div className="w-[100%] h-[80%] flex items-center justify-around relative">
+
+        <div className="w-full grow flex relative  gap-3">
           <div
-            className={`w-4/6 h-[75%] rounded-xl bg-black  border border-black flex flex-wrap  gap-2  p-4 overflow-y-auto ${isLoading ? "bg-opacity-80 items-center  justify-center" : "bg-opacity-30"}
+            className={`w-4/6 h-full rounded-xl bg-black  border border-black flex flex-wrap  gap-2  p-4 overflow-y-auto ${isLoading ? "bg-opacity-80 items-center  justify-center" : "bg-opacity-30"}
             ${errorState ? "bg-opacity-100 items-center  justify-center" : ""}`}
             ref={scrollBar}
           >
@@ -222,12 +257,18 @@ function SearchBook({ err, ListBookData, indexBookList }) {
             ) : (
               <>
                 {bookListResult.map((book, index) => (
-                  <div key={index} className={`w-[22%] h-3/4 border border-white bg-slate-500 ${bookIndexAt === index ? "  border-[3px] border-red-600" : ""}`}></div>
+                  <div key={index} className={`relative w-[22%] h-3/4 border-[3px] bg-slate-500 ${bookIndexAt === index ? " border-red-600" : "border-white"}`}>
+                    <img
+                      src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/art-book-cover-design-template-34323b0f0734dccded21e0e3bebf004c_screen.jpg?ts=1637015198"
+                      alt=""
+                      className="absolute bg-contain w-full h-full"
+                    />
+                  </div>
                 ))}
               </>
             )}
           </div>
-          <div className="w-[30%] h-[75%] border border-black flex flex-wrap items-center flex-col bg-black bg-opacity-60 rounded-md justify-around">
+          <div className="grow h-full border border-black flex flex-wrap items-center flex-col bg-black bg-opacity-60 rounded-md justify-around">
             {bookListResult.length === 0 ? (
               <>
                 <h1 className="text-xl underline text-white font-serif font-bold ">TITLE</h1>
@@ -246,21 +287,20 @@ function SearchBook({ err, ListBookData, indexBookList }) {
             ) : (
               <>
                 <h1 className="text-xl underline text-white font-serif font-bold ">TITLE</h1>
-                <h1 className="text-3xl text-orange-400 w-full block   text-center">{bookListResult[indexBookList].titles.toUpperCase()}</h1>
+                <h1 className="text-3xl text-orange-400 w-full block   text-center">{bookListResult[indexBookList].Title.toUpperCase()}</h1>
                 <h1 className="text-xl underline text-white font-serif font-bold">AUTHOR</h1>
-                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].authors.toUpperCase()}</h1>
+                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].Author.toUpperCase()}</h1>
                 <h1 className="text-xl underline text-white font-serif font-bold">EDITION</h1>
-                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].editions.toUpperCase()}</h1>
+                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].Edition.toUpperCase()}</h1>
                 <h1 className="text-xl underline text-white font-serif font-bold">YEAR</h1>
-                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].year.toUpperCase()}</h1>
+                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].Year.toUpperCase()}</h1>
                 <h1 className="text-xl underline text-white font-serif font-bold">LANGUAGE</h1>
-                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].languages.toUpperCase()}</h1>
+                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].Language.toUpperCase()}</h1>
                 <h1 className="text-xl underline text-white font-serif font-bold">AVAILABILITY</h1>
-                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].availability.toUpperCase()}</h1>
+                <h1 className="text-3xl text-orange-400">{bookListResult[indexBookList].Availability.toUpperCase()}</h1>
               </>
             )}
           </div>
-          <div className="w-4/6 h-[75%]  absolute left-4"></div>
         </div>
       </div>
     </>
@@ -284,30 +324,30 @@ function ReadBook({ text, Title, maxPage, maxLine, pageNow, lineNow }) {
               <div className="my-2 h-[90%] flex flex-col gap-3">
                 <div className="flex gap-2">
                   <h1 className="font-bold">Title: {Title}</h1>
-                  <p>{}</p>
                 </div>
                 <div className="flex gap-2">
                   <h1 className="font-bold">Max Page: {maxPage}</h1>
-                  <p>{}</p>
                 </div>
-
                 <div className="flex gap-2">
                   <h1 className="font-bold">Max Line: {maxLine}</h1>
-                  <p>{}</p>
                 </div>
                 <div className="flex gap-2">
                   <h1 className="font-bold">Page Now: {pageNow}</h1>
-                  <p>{}</p>
                 </div>
                 <div className="flex gap-2">
                   <h1 className="font-bold">Line Now: {lineNow}</h1>
-                  <p>{}</p>
                 </div>
               </div>
             </div>
-            <div className="w-3/4 h-full bg-slate-800 p-3">
-              <h1 className="text-white font-bold">Button Information:</h1>
-              <p className="text-white pl-2">{buttonMsg}</p>
+            <div className="w-3/4 h-full bg-white p-3">
+              <h1 className="text-black font-bold">Button Information:</h1>
+              <p>Tombol 1 : Halaman Utama </p>
+              <p>Tombol 3 : Tandai Baris </p>
+              <p>Tombol 4 : Buka baris yang ditandai </p>
+              <p>Tombol Atas : Baris sebelumnya</p>
+              <p> Tombol Bawah : Baris selanjutnya</p>
+              <p> Tombol Kiri : Tab Kiri </p>
+              <p>Tombol Kanan : Tab Kanan</p>
             </div>
           </div>
         </div>
@@ -321,19 +361,54 @@ function SelectBook({ Title, Author, Availbillity, Edition, Year, Language, cove
   const [buttonMsg, setButtonMsg] = useState("");
   return (
     <Context.Provider value={[buttonMsg, setButtonMsg]}>
-      <div className="w-full h-full pt-36">
-        <div className="w-5/6 h-1/5 m-auto  border-2 border-black">
+      <div className="w-full h-full pt-44 bg-slate-50/20 flex flex-col justify-start items-center">
+        <div className="w-5/6 h-1/5 border-2 border-black mb-3 relative flex justify-center">
           <VirtualBrailleDisplay text={Title} disabled={true} />
+          <h1 className="absolute -top-[85px]  text-5xl font-bold ">E-braille V2</h1>
         </div>
-        <div className="w-3/6 h-[56%] m-auto bg-red-300 bg-opacity-60 relative border-2 border-white flex gap-4 justify-center mt-5 items-center rounded-lg border-opacity-25">
-          <BookCoverSwap coverUri={coverUri_1} className="" />
-          <div className="w-2/6 h-4/6 border-2 border-black flex flex-col gap-1 justify-around pl-2 rounded-lg bg-white bg-opacity-70 border-opacity-30">
-            <p>Title: {Title}</p>
-            <p>Author: {Author}</p>
-            <p>Availbillity: {Availbillity}</p>
-            <p>Edition: {Edition}</p>
-            <p>Year: {Year}</p>
-            <p>Language: {Language}</p>
+        <div className=" w-5/6 h-[70%] bg-slate-400/0 flex p-2 gap-2">
+          <div className="w-2/3 h-full  bg-red-300/90 relative border-2 border-white flex gap-4 justify-center  items-center rounded-lg border-opacity-25">
+            <BookCoverSwap coverUri={coverUri_1} className="" />
+            <div className="w-2/6 h-4/6 border-2 border-black flex flex-col gap-1 justify-around pl-2 rounded-lg bg-white bg-opacity-70 border-opacity-30">
+              <p>Title: {Title}</p>
+              <p>Author: {Author}</p>
+              <p>Availbillity: {Availbillity}</p>
+              <p>Edition: {Edition}</p>
+              <p>Year: {Year}</p>
+              <p>Language: {Language}</p>
+            </div>
+          </div>
+          <div className="w-1/3 h-full  bg-white/80 relative border-2 border-white flex gap-4 justify-center  items-center rounded-lg border-opacity-25">
+            <div className=" border-2 border-emerald-400 rounded-md p-3">
+              <h1 className="text-black font-bold text-xl">Button Information:</h1>
+              <p className="">
+                <span className="font-bold">Tombol 1:</span> Halaman Utama
+              </p>
+              <p className="">
+                <span className="font-bold">Tombol 2:</span> Cari Buku
+              </p>
+              <p className="">
+                <span className="font-bold">Tombol 5:</span> Daftar Bookmark Buku
+              </p>
+              <p className="">
+                <span className="font-bold">Tombol 22:</span> Logout
+              </p>
+              <p className="">
+                <span className="font-bold">Tombol 24:</span> Baca Buku
+              </p>
+              <p className="">
+                <span className="font-bold">Tombol Atas:</span> Buku Sebelumnya
+              </p>
+              <p className="">
+                <span className="font-bold">Tombol Bawah:</span> Buku Selanjutnya
+              </p>
+              <p className="">
+                <span className="font-bold">Tombol Kiri:</span> Tab Kiri
+              </p>
+              <p className="">
+                <span className="font-bold">Tombol Kanan:</span> Tab Kanan
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -344,8 +419,10 @@ function SelectBook({ Title, Author, Availbillity, Edition, Year, Language, cove
 function WaitMode() {
   return (
     <>
-      <div className="h-screen w-screen  bg-[#167492] flex justify-center items-center">
-        <h1 className=" font-bold text-3xl">{"WAIT!--> Conecting to e-braille display"}</h1>
+      {/* <div className="h-screen w-screen  bg-[#167492] flex justify-center items-center"> */}
+      <div className="h-screen w-screen  bg-white flex justify-center items-center relative">
+        <img src={binusBg} alt="" className="bg-contain w-[50%] h-[50%]" />
+        <h1 className=" font-bold text-3xl absolute bottom-28">{"WAIT!--> Conecting to e-braille display "}</h1>
       </div>
     </>
   );
