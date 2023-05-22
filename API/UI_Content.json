@@ -25,13 +25,14 @@
   "content_3": {
     "ListBookData": [
       {
-        "Author": "asd",
-        "Availability": "5",
+        "availability": "6",
+        "titles": "Mistborn: The Final Empire",
+        "languages": "ENG",
+        "authors": "Brandon Sanderson ",
+        "year": "2006",
+        "editions": "1",
         "BookCoverUri": "http://localhost:3001/book/getCover?isbn=100007477155",
-        "Edition": "2",
-        "Language": "indonesia",
-        "Title": "buku 1",
-        "Year": "2000"
+        "publishers": "Tor Books"
       }
     ],
     "errorState": false,
