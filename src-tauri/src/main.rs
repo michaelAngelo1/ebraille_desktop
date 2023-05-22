@@ -6,7 +6,7 @@
 // use serde::{Deserialize, Serialize};
 use serde_json::{Number, Value};
 extern crate serde;
-static INPUT_PATH: &str = "../../API/UI_Content.json";
+static INPUT_PATH: &str = "../API/UI_Content.json";
 // static INPUT_PATH: &str = "/home/pi/Desktop/tauri/API/UI_Content.json";
 
 fn main() {
@@ -15,7 +15,8 @@ fn main() {
             data_from_ui_login,
             data_from_ui_search,
             reset_error_state_from_ui_search,
-            update_ui
+            reset_error_state_from_ui_login,
+            update_ui,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -57,5 +58,13 @@ fn reset_error_state_from_ui_search() {
     let json_in_string = std::fs::read_to_string(INPUT_PATH).unwrap();
     let mut json = serde_json::from_str::<Value>(&json_in_string).unwrap();
     json["content_3"]["errorState"] = false.into();
+    std::fs::write(INPUT_PATH, serde_json::to_string_pretty(&json).unwrap()).unwrap();
+}
+
+#[tauri::command]
+fn reset_error_state_from_ui_login() {
+    let json_in_string = std::fs::read_to_string(INPUT_PATH).unwrap();
+    let mut json = serde_json::from_str::<Value>(&json_in_string).unwrap();
+    json["content_0"]["errorState"] = false.into();
     std::fs::write(INPUT_PATH, serde_json::to_string_pretty(&json).unwrap()).unwrap();
 }

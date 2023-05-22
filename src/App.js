@@ -49,9 +49,10 @@ function App() {
       ) : dataFromRust.mode === 1 ? (
         <>
           <SelectBook
+            brailleCell={dataFromRust.content_1.brailleCell}
             Title={dataFromRust.content_1.Title}
             Author={dataFromRust.content_1.Author}
-            Availbillity={dataFromRust.content_1.avail}
+            Availability={dataFromRust.content_1.avail}
             Edition={dataFromRust.content_1.Edition}
             Year={dataFromRust.content_1.Year}
             Language={dataFromRust.content_1.Langguage}
@@ -82,20 +83,22 @@ function App() {
 
 export default App;
 
-function LoginPage({ nik, err }) {
+function LoginPage({ nik, error }) {
+  console.log("err: ", error);
   const [data, setData] = useState("");
   function toRust(data, status) {
     invoke("data_from_ui_login", { data, status });
   }
   const [peek, setPeek] = useState(false);
-  const [errorState, setErrorState] = useState(err);
-  useEffect(() => {
-    setErrorState(err);
-    if (err === true)
-      setTimeout(() => {
-        setErrorState(false);
-      }, 2500);
-  }, [nik, err]);
+  const [errorState, setErrorState] = useState(error);
+  const resetError = () => {
+    setTimeout(() => {
+      invoke("reset_error_state_from_ui_login");
+      setErrorState(false);
+      setData("");
+      toRust("", false);
+    }, 1500);
+  };
   return (
     <>
       <div className="h-full w-full justify-center  flex ">
@@ -110,6 +113,11 @@ function LoginPage({ nik, err }) {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 console.log(data);
+                if (data.length !== 16) {
+                  setErrorState(true);
+                  resetError();
+                  return;
+                }
                 toRust(data, true);
                 setTimeout(() => {
                   setData("");
@@ -122,11 +130,11 @@ function LoginPage({ nik, err }) {
           <p className="text-lg mt-0 border-black w-4/5 m-auto text-black cursor-default">
             {errorState ? (
               <>
-                <span className="text-red-600">Error:</span> NIK tidak terdaftar cek kembali NIK yang diberikan
+                <span className="text-red-600">Error:</span> Nomor NIK tidak terdaftar cek kembali NIK yang diberikan!
               </>
             ) : (
               <>
-                <span className="text-indigo-500">Info:</span> Silahkan masukan nik anda, dan tekan tombol login pada braille display
+                <span className="text-indigo-500">Info:</span> Silahkan masukan nomor nik anda, lalu tekan tombol enter pada keyboard.
               </>
             )}
           </p>
@@ -352,14 +360,14 @@ function ReadBook({ text, Title, maxPage, maxLine, pageNow, lineNow }) {
   );
 }
 
-function SelectBook({ Title, Author, Availbillity, Edition, Year, Language, coverUri_1 }) {
-  console.log("Title, Author, Availbillity, Edition, Year, Language, coverUri_1: ", Title, Author, Availbillity, Edition, Year, Language, coverUri_1);
+function SelectBook({ Title, Author, Availability, Edition, Year, Language, coverUri_1, brailleCell }) {
+  console.log("Title, Author, Availability, Edition, Year, Language, coverUri_1: ", Title, Author, Availability, Edition, Year, Language, coverUri_1);
   const [buttonMsg, setButtonMsg] = useState("");
   return (
     <Context.Provider value={[buttonMsg, setButtonMsg]}>
       <div className="w-full h-full pt-44 bg-slate-50/20 flex flex-col justify-start items-center">
         <div className="w-5/6 h-1/5 border-2 border-black mb-3 relative flex justify-center">
-          <VirtualBrailleDisplay text={Title} disabled={true} />
+          <VirtualBrailleDisplay text={brailleCell} disabled={true} />
           <h1 className="absolute -top-[85px]  text-5xl font-bold ">E-braille V2</h1>
         </div>
         <div className=" w-5/6 h-[70%] bg-slate-400/0 flex p-2 gap-2">
@@ -368,7 +376,7 @@ function SelectBook({ Title, Author, Availbillity, Edition, Year, Language, cove
             <div className="w-2/6 h-4/6 border-2 border-black flex flex-col gap-1 justify-around pl-2 rounded-lg bg-white bg-opacity-70 border-opacity-30">
               <p>Title: {Title}</p>
               <p>Author: {Author}</p>
-              <p>Availbillity: {Availbillity}</p>
+              <p>Availability: {Availability}</p>
               <p>Edition: {Edition}</p>
               <p>Year: {Year}</p>
               <p>Language: {Language}</p>

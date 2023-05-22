@@ -1,0 +1,43 @@
+{
+  "content_0": {
+    "errorState": false,
+    "nik": "",
+    "status": false
+  },
+  "content_1": {
+    "Author": "",
+    "BookCover": "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/art-book-cover-design-template-34323b0f0734dccded21e0e3bebf004c_screen.jpg?ts=1637015198",
+    "Edition": "",
+    "Langguage": "",
+    "Title": "Si pemimpi - Chapter 4",
+    "Year": "",
+    "avail": "6",
+    "brailleCell": "tes"
+  },
+  "content_2": {
+    "line": 29,
+    "maxLine": 29,
+    "maxPage": 8,
+    "page": 2,
+    "pageContent": "AKU , LAPAR",
+    "titleBook": "Alice in Wonderland - Chapter 2"
+  },
+  "content_3": {
+    "ListBookData": [
+      {
+        "Author": "asd",
+        "Availability": "5",
+        "BookCoverUri": "http://localhost:3001/book/getCover?isbn=100007477155",
+        "Edition": "2",
+        "Language": "indonesia",
+        "Title": "buku 1",
+        "Year": "2000"
+      }
+    ],
+    "errorState": false,
+    "index": 0,
+    "status": false,
+    "title": "sdasd"
+  },
+  "mode": 0
+}
