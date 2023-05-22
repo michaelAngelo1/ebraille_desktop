@@ -20,15 +20,20 @@ function App() {
   async function updateUI() {
     return await invoke("update_ui");
   }
+
   useEffect(() => {
     clearInterval();
     setInterval(() => {
       updateUI()
         .catch((err) => console.log("ERROR:", err.message))
         .then((newData) => {
-          if (JSON.stringify(tes) !== JSON.stringify(JSON.parse(newData))) {
-            tes = JSON.parse(newData);
-            setDataFromRust(tes);
+          try {
+            if (JSON.stringify(tes) !== JSON.stringify(JSON.parse(newData))) {
+              tes = JSON.parse(newData);
+              setDataFromRust(tes);
+            }
+          } catch (error) {
+            console.log("error: ", error);
           }
         });
     }, 200);
@@ -182,10 +187,14 @@ function SearchBook({ err, ListBookData, indexBookList }) {
   }, [errorState]);
 
   useEffect(() => {
-    setBookIndexAt(indexBookList);
-    const position = scrollBar.current.scrollTop;
-    if (indexBookList < 4) scrollBar.current.scrollTo({ top: 0 });
-    else if (indexBookList % 4 === 0) scrollBar.current.scrollTo({ top: position + 459 });
+    try {
+      setBookIndexAt(indexBookList);
+      const position = scrollBar.current.scrollTop;
+      if (indexBookList < 4) scrollBar.current.scrollTo({ top: 0 });
+      else if (indexBookList % 4 === 0) scrollBar.current.scrollTo({ top: position + 459 });
+    } catch (error) {
+      console.log("error: ", error);
+    }
   }, [indexBookList]);
 
   return (
