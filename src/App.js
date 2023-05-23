@@ -242,6 +242,9 @@ function SearchBook({ err, ListBookData, indexBookList }) {
               <span className="font-bold">Tombol 7 :</span> Menampilkan Ketikkan Pengguna
             </p>
             <p>
+              <span className="font-bold">Tombol 8:</span> Tombol Panggil Bantuan
+            </p>
+            <p>
               <span className="font-bold">Tombol 24 :</span> Baca Buku
             </p>
             <p>
@@ -355,11 +358,16 @@ function ReadBook({ text, Title, maxPage, maxLine, pageNow, lineNow }) {
             <div className="w-3/4 h-full bg-white p-3">
               <h1 className="text-black font-bold">Button Information:</h1>
               <p>Tombol 1 : Halaman Utama </p>
-              <p>Tombol 3 : Tandai Baris </p>
-              <p>Tombol 4 : Buka baris yang ditandai </p>
-              <p>Tombol Atas : Baris sebelumnya</p>
-              <p> Tombol Bawah : Baris selanjutnya</p>
-              <p> Tombol Kiri : Tab Kiri </p>
+              <p>Tombol 3 : Lakukan Bookmark</p>
+              <p>Tombol 4 : Buka Baris Yang Ditandai</p>
+              <p>Tombol 6 : Tampilkan Teks Content Buku</p>
+              <p>Tombol 7 : Tampilkan Informasi Halaman Dan Baris Buku Sekarang</p>
+              <p>Tombol 8 : Tombol Panggil Bantuan</p>
+              <p>Tombol 23 : Batalkan Bookmark</p>
+              <p>Tombol 24 : Konfirmasi Bookmark</p>
+              <p>Tombol Atas : Baris Sebelumnya</p>
+              <p>Tombol Bawah : Baris Selanjutnya</p>
+              <p>Tombol Kiri : Tab Kiri</p>
               <p>Tombol Kanan : Tab Kanan</p>
             </div>
           </div>
@@ -402,6 +410,9 @@ function SelectBook({ Title, Author, Availability, Edition, Year, Language, cove
               </p>
               <p className="">
                 <span className="font-bold">Tombol 5:</span> Daftar Bookmark Buku
+              </p>
+              <p className="">
+                <span className="font-bold">Tombol 8:</span> Tombol Panggil Bantuan
               </p>
               <p className="">
                 <span className="font-bold">Tombol 22:</span> Logout
