@@ -332,7 +332,7 @@ function ReadBook({ text, Title, maxPage, maxLine, pageNow, lineNow }) {
         <div className="h-[25%] w-4/5  border-2 border-black relative top-4">
           <VirtualBrailleDisplay text={text} disabled={false} />
         </div>
-        <div className="h-2/5 w-4/5  flex flex-col">
+        <div className="h-3/5 w-4/5  flex flex-col">
           <div className="w-full h-3/4 bg-slate-500 p-2 flex gap-2">
             <div className="w-1/4 h-full bg-slate-100 p-3">
               <h1 className=" text-center font-bold">Book Information</h1>
