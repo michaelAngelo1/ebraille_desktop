@@ -54,10 +54,10 @@
     },
     "windows": [
       {
-        "fullscreen": false,
+        "fullscreen": true,
         "height": 600,
         "resizable": true,
-        "title": "e-braille",
+        "title": "E-braille V2",
         "width": 800
       }
     ]
