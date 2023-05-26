@@ -25,20 +25,20 @@
   "content_3": {
     "ListBookData": [
       {
-        "availability": "6",
-        "titles": "Mistborn: The Final Empire",
-        "languages": "ENG",
-        "authors": "Brandon Sanderson ",
-        "year": "2006",
-        "editions": "1",
         "BookCoverUri": "http://localhost:3001/book/getCover?isbn=100007477155",
-        "publishers": "Tor Books"
+        "authors": "Brandon Sanderson ",
+        "availability": "6",
+        "editions": "1",
+        "languages": "ENG",
+        "publishers": "Tor Books",
+        "titles": "Mistborn: The Final Empire",
+        "year": "2006"
       }
     ],
     "errorState": false,
     "index": 0,
     "status": false,
-    "title": "sdasd"
+    "title": "tes"
   },
-  "mode": 0
+  "mode": 3
 }

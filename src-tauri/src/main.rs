@@ -6,8 +6,8 @@
 // use serde::{Deserialize, Serialize};
 use serde_json::{Number, Value};
 extern crate serde;
-// static INPUT_PATH: &str = "../API/UI_Content.json";
-static INPUT_PATH: &str = "/home/pi/Desktop/tauri/API/UI_Content.json";
+static INPUT_PATH: &str = "../API/UI_Content.json";
+// static INPUT_PATH: &str = "/home/pi/Desktop/tauri/API/UI_Content.json";
 
 fn main() {
     tauri::Builder::default()

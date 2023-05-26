@@ -89,7 +89,6 @@ function App() {
 export default App;
 
 function LoginPage({ nik, error }) {
-  console.log("err: ", error);
   const [data, setData] = useState("");
   function toRust(data, status) {
     invoke("data_from_ui_login", { data, status });
@@ -102,8 +101,16 @@ function LoginPage({ nik, error }) {
       setErrorState(false);
       setData("");
       toRust("", false);
-    }, 1500);
+    }, 2000);
   };
+  useEffect(() => {
+    if (error === true) {
+      setErrorState(true);
+      console.log("err: ", error);
+      resetError();
+    } else setErrorState(error);
+  }, [error]);
+
   return (
     <>
       <div className="h-full w-full justify-center  flex ">
@@ -120,7 +127,6 @@ function LoginPage({ nik, error }) {
                 console.log(data);
                 if (data.length !== 16) {
                   setErrorState(true);
-                  resetError();
                   return;
                 }
                 toRust(data, true);
@@ -133,7 +139,7 @@ function LoginPage({ nik, error }) {
             onChange={(e) => setData(e.target.value)}
           />
           <p className="text-lg mt-0 border-black w-4/5 m-auto text-black cursor-default">
-            {errorState ? (
+            {errorState === true ? (
               <>
                 <span className="text-red-600">Error:</span> Nomor NIK tidak terdaftar cek kembali NIK yang diberikan!
               </>
@@ -152,30 +158,28 @@ function LoginPage({ nik, error }) {
   );
 }
 
-let timeoutID = undefined;
-
 function SearchBook({ err, ListBookData, indexBookList }) {
+  let timeoutID = undefined;
+
   const bookListResult = ListBookData;
   const [bookTitle, setBookTitle] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [bookIndexAt, setBookIndexAt] = useState(indexBookList);
-  const [errorState, setErrorState] = useState(true);
+  const [errorState, setErrorState] = useState(false);
   const scrollBar = useRef(null);
 
   function toRust(data, status) {
     invoke("data_from_ui_search", { data, status });
   }
+
   useEffect(() => {
     if (ListBookData.length !== 0) {
       setIsLoading(false);
       setErrorState(false);
+      invoke("reset_error_state_from_ui_search");
       clearTimeout(timeoutID);
-    } else setErrorState(err);
-    if (errorState === true) {
-      clearTimeout(timeoutID);
-      setIsLoading(false);
-    }
-  }, [err, ListBookData]);
+    } else setErrorState(true);
+  }, [ListBookData]);
 
   useEffect(() => {
     setIsLoading(false);
@@ -220,7 +224,7 @@ function SearchBook({ err, ListBookData, indexBookList }) {
                     }, 500);
                     timeoutID = setTimeout(() => {
                       if (ListBookData.length === 0) setErrorState(true);
-                    }, 7500);
+                    }, 10000);
                   }
                 }}
                 onChange={(e) => {
@@ -264,7 +268,9 @@ function SearchBook({ err, ListBookData, indexBookList }) {
 
         <div className="w-full grow flex relative  gap-3">
           <div
-            className={`w-4/6 h-full rounded-xl bg-black  border border-black flex flex-wrap  gap-2  p-4 overflow-y-auto ${isLoading ? "bg-opacity-80 items-center  justify-center" : "bg-opacity-30"}
+            className={`w-[1227px] h-full rounded-xl bg-black  border border-black flex flex-wrap  gap-2  p-4 overflow-y-auto ${
+              isLoading ? "bg-opacity-80 items-center  justify-center" : "bg-opacity-30"
+            }
             ${errorState ? "bg-opacity-100 items-center  justify-center" : ""}`}
             ref={scrollBar}
           >
@@ -284,7 +290,7 @@ function SearchBook({ err, ListBookData, indexBookList }) {
               </>
             )}
           </div>
-          <div className="grow h-full border border-black flex flex-wrap items-center flex-col bg-black bg-opacity-60 rounded-md justify-around">
+          <div className="w-[601px] h-full border border-black flex flex-wrap items-center flex-col bg-black bg-opacity-60 rounded-md justify-around">
             {bookListResult.length === 0 ? (
               <>
                 <h1 className="text-xl underline text-white font-serif font-bold ">TITLE</h1>
