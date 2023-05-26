@@ -109,7 +109,7 @@ function LoginPage({ nik, error }) {
       console.log("err: ", error);
       resetError();
     } else setErrorState(error);
-  }, [error]);
+  }, [error, errorState]);
 
   return (
     <>
@@ -158,14 +158,13 @@ function LoginPage({ nik, error }) {
   );
 }
 
+let timeoutID = undefined;
 function SearchBook({ err, ListBookData, indexBookList }) {
-  let timeoutID = undefined;
-
   const bookListResult = ListBookData;
   const [bookTitle, setBookTitle] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [bookIndexAt, setBookIndexAt] = useState(indexBookList);
-  const [errorState, setErrorState] = useState(false);
+  const [errorState, setErrorState] = useState(err);
   const scrollBar = useRef(null);
 
   function toRust(data, status) {
@@ -178,12 +177,16 @@ function SearchBook({ err, ListBookData, indexBookList }) {
       setErrorState(false);
       invoke("reset_error_state_from_ui_search");
       clearTimeout(timeoutID);
-    } else setErrorState(true);
-  }, [ListBookData]);
+    }
+    if (err === true) {
+      setIsLoading(false);
+      setErrorState(true);
+    }
+  }, [ListBookData, err]);
 
   useEffect(() => {
     setIsLoading(false);
-    if (errorState)
+    if (errorState === true)
       setTimeout(() => {
         setErrorState(false);
         invoke("reset_error_state_from_ui_search");
