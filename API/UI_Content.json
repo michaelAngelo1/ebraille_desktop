@@ -5,34 +5,34 @@
     "status": false
   },
   "content_1": {
-    "Author": "",
+    "Author": "gerald studio",
     "BookCover": "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/art-book-cover-design-template-34323b0f0734dccded21e0e3bebf004c_screen.jpg?ts=1637015198",
-    "Edition": "",
-    "Langguage": "",
+    "Edition": "3",
+    "Langguage": "ENG",
     "Title": "Si pemimpi - Chapter 4",
-    "Year": "",
+    "Year": "2023",
     "avail": "6",
-    "brailleCell": "tes"
+    "brailleCell": "Si pemimpi - Chapter 4"
   },
   "content_2": {
     "line": 29,
     "maxLine": 29,
     "maxPage": 8,
     "page": 2,
-    "pageContent": "AKU , LAPAR",
+    "pageContent": "Dia perempuan yang baik",
     "titleBook": "Alice in Wonderland - Chapter 2"
   },
   "content_3": {
     "ListBookData": [
       {
-        "BookCoverUri": "http://localhost:3001/book/getCover?isbn=100007477155",
-        "authors": "Brandon Sanderson ",
+        "BookCoverUri": "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/art-book-cover-design-template-34323b0f0734dccded21e0e3bebf004c_screen.jpg?ts=1637015198",
+        "authors": "Regina Phalange",
         "availability": "6",
         "editions": "1",
         "languages": "ENG",
         "publishers": "Tor Books",
-        "titles": "Mistborn: The Final Empire",
-        "year": "2006"
+        "titles": "The Book Of Art",
+        "year": "2021"
       }
     ],
     "errorState": false,
