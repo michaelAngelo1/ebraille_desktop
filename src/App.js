@@ -10,6 +10,21 @@ import bg from "./asset/mountains.svg";
 import binusBg from "./asset/logoBinus.png";
 import { LoadingAnimation } from "./component/loadingComponent";
 
+// MODAL
+import Modal from 'react-modal'
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
+
+Modal.setAppElement(document.getElementById('root'))
+
 const NotVisible = VisibilityOffOutlinedIcon;
 const Visible = VisibilityOutlinedIcon;
 let tes = undefined;
@@ -17,6 +32,8 @@ export const Context = createContext(null);
 
 function App() {
   const [dataFromRust, setDataFromRust] = useState(undefined);
+  
+  
   async function updateUI() {
     return await invoke("update_ui");
   }
@@ -73,6 +90,11 @@ function App() {
             maxLine={dataFromRust.content_2.maxLine}
             maxPage={dataFromRust.content_2.maxPage}
             pageNow={dataFromRust.content_2.page}
+            
+            // GOTOPAGE
+            popUp={dataFromRust.content_2.popup}
+            gotoPage={dataFromRust.content_2.gotopage}
+            
           />
         </>
       ) : dataFromRust.mode === 3 ? (
@@ -212,9 +234,10 @@ function SearchBook({ err, ListBookData, indexBookList }) {
             <div className=" w-[80%] h-auto bg-slate-50/20 flex flex-col justify-center items-center rounded-lg p-2 border-2 border-orange-500">
               <h1 className="absolute top-[40px] text-center pl-1 w-full text-indigo-300 text-4xl">Search Book</h1>
               <p className="font-semibold text-2xl text-center  mt-2 cursor-default text-indigo-300">Title</p>
+              // INPUT SEARCHBOOK HERE
               <input
                 type="text"
-                className=" text-2xl text-center mt-1 border-b-2 border-black w-[90%] cursor-default bg-transparent focus:outline-none text-white"
+                className="text-2xl text-center mt-1 border-b-2 border-black w-[90%] cursor-default bg-transparent focus:outline-none text-white"
                 autoFocus
                 value={bookTitle}
                 onKeyDown={(e) => {
@@ -235,6 +258,8 @@ function SearchBook({ err, ListBookData, indexBookList }) {
                   setErrorState(false);
                 }}
               />
+              
+              
             </div>
           </div>
           <div className="grow h-full bg-blue-800 bg-opacity-10 border-2 border-slate-800 border-opacity-50 rounded-xl relative p-9 pt-12 text-">
@@ -250,6 +275,9 @@ function SearchBook({ err, ListBookData, indexBookList }) {
             </p>
             <p>
               <span className="font-bold">Tombol 8:</span> Tombol Panggil Bantuan
+            </p>
+            <p>
+              <span className="font-bold">Tombol 9:</span> Tombol Mode Legend
             </p>
             <p>
               <span className="font-bold">Tombol 24 :</span> Baca Buku
@@ -332,58 +360,127 @@ function SearchBook({ err, ListBookData, indexBookList }) {
   );
 }
 
-function ReadBook({ text, Title, maxPage, maxLine, pageNow, lineNow }) {
+function ReadBook({ text, Title, maxPage, maxLine, pageNow, lineNow, popUp}) {
+  
+  // to Rust
+  function toRust(popUp, gotoPage) {
+    invoke("data_from_ui_read", { popUp, gotoPage });
+  }
+  
   const [buttonMsg, setButtonMsg] = useState("");
+  
+  // FOR MODAL
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  let subtitle;
+  const [modalIsOpen, setIsOpen] = useState(false);
+  
+  // popUp state
+  const [poppedUp, setIsPoppedUp] = useState(popUp);
+  
+  // page state
+  const [gotoPageNum, setGotoPageNum] = useState("");
+  
+  function afterOpenModal() {
+    subtitle.style.color = '#f00';
+  }
+  
+  function closeModal() {
+    setIsPoppedUp(!popUp);
+  }
+  
+  const handleSubmitGotoPage = (event) => {
+    event.preventDefault();
+    
+    if(gotoPageNum > 0) {
+      closeModal()
+      setGotoPageNum("");
+    }
+  }
+  
   return (
-    <Context.Provider value={[buttonMsg, setButtonMsg]}>
-      <div className="h-screen w-screen  flex flex-col justify-around items-center">
-        <h1 className="font-bold text-5xl relative top-7">E-Braille.V2</h1>
-        <div className="h-[25%] w-4/5  border-2 border-black relative top-4">
-          <VirtualBrailleDisplay text={text} disabled={false} />
-        </div>
-        <div className="h-3/5 w-4/5  flex flex-col">
-          <div className="w-full h-3/4 bg-slate-500 p-2 flex gap-2">
-            <div className="w-1/4 h-full bg-slate-100 p-3">
-              <h1 className=" text-center font-bold">Book Information</h1>
-              <hr className="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
-              <div className="my-2 h-[90%] flex flex-col gap-3">
-                <div className="flex gap-2">
-                  <h1 className="font-bold">Title: {Title}</h1>
-                </div>
-                <div className="flex gap-2">
-                  <h1 className="font-bold">Max Page: {maxPage}</h1>
-                </div>
-                <div className="flex gap-2">
-                  <h1 className="font-bold">Max Line: {maxLine}</h1>
-                </div>
-                <div className="flex gap-2">
-                  <h1 className="font-bold">Page Now: {pageNow}</h1>
-                </div>
-                <div className="flex gap-2">
-                  <h1 className="font-bold">Line Now: {lineNow}</h1>
+    <>
+      <Context.Provider value={[buttonMsg, setButtonMsg]}>
+        <div className="h-screen w-screen  flex flex-col justify-around items-center">
+          <h1 className="font-bold text-5xl relative top-7">E-Braille.V2</h1>
+          <div className="h-[25%] w-4/5  border-2 border-black relative top-4">
+            <VirtualBrailleDisplay text={text} disabled={false} />
+          </div>
+          <div className="h-3/5 w-4/5  flex flex-col">
+            <div className="w-full h-3/4 bg-slate-500 p-2 flex gap-2">
+              <div className="w-1/4 h-full bg-slate-100 p-3">
+                <h1 className=" text-center font-bold">Book Information</h1>
+                <hr className="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
+                <div className="my-2 h-[90%] flex flex-col gap-3">
+                  <div className="flex gap-2">
+                    <h1 className="font-bold">Title: {Title}</h1>
+                  </div>
+                  <div className="flex gap-2">
+                    <h1 className="font-bold">Max Page: {maxPage}</h1>
+                  </div>
+                  <div className="flex gap-2">
+                    <h1 className="font-bold">Max Line: {maxLine}</h1>
+                  </div>
+                  <div className="flex gap-2">
+                    <h1 className="font-bold">Page Now: {pageNow}</h1>
+                  </div>
+                  <div className="flex gap-2">
+                    <h1 className="font-bold">Line Now: {lineNow}</h1>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="w-3/4 h-full bg-white p-3">
-              <h1 className="text-black font-bold">Button Information:</h1>
-              <p>Tombol 1 : Halaman Utama </p>
-              <p>Tombol 3 : Lakukan Bookmark</p>
-              <p>Tombol 4 : Buka Baris Yang Ditandai</p>
-              <p>Tombol 6 : Tampilkan Teks Content Buku</p>
-              <p>Tombol 7 : Tampilkan Informasi Halaman Dan Baris Buku Sekarang</p>
-              <p>Tombol 8 : Tombol Panggil Bantuan</p>
-              <p>Tombol 23 : Batalkan Bookmark</p>
-              <p>Tombol 24 : Konfirmasi Bookmark</p>
-              <p>Tombol Atas : Baris Sebelumnya</p>
-              <p>Tombol Bawah : Baris Selanjutnya</p>
-              <p>Tombol Kiri : Tab Kiri</p>
-              <p>Tombol Kanan : Tab Kanan</p>
+              <div className="w-3/4 h-full bg-white p-3">
+                <h1 className="text-black font-bold">Button Information:</h1>
+                {poppedUp ? <p>pop up state : tru</p> : <p>pop up state : fals</p> }
+                <p>Tombol 1 : Halaman Utama </p>
+                <p>Tombol 3 : Lakukan Bookmark</p>
+                <p>Tombol 4 : Buka Baris Yang Ditandai</p>
+                <p>Tombol 6 : Tampilkan Teks Content Buku</p>
+                <p>Tombol 7 : Tampilkan Informasi Halaman Dan Baris Buku Sekarang</p>
+                <p>Tombol 8 : Tombol Panggil Bantuan</p>
+                <p>Tombol 9 : Tombol Mode Legend</p>
+                <p>Tombol 11 : Tombol Go To Page</p>
+                <p>Tombol 23 : Batalkan Bookmark</p>
+                <p>Tombol 24 : Konfirmasi Bookmark</p>
+                <p>Tombol Atas : Baris Sebelumnya</p>
+                <p>Tombol Bawah : Baris Selanjutnya</p>
+                <p>Tombol Kiri : Tab Kiri</p>
+                <p>Tombol Kanan : Tab Kanan</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </Context.Provider>
+      </Context.Provider>
+      { popUp && (
+          <>
+            <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Enter page you want to jump</h2>
+            <div className="form">
+                <div className="input-container">
+                  <input 
+                    type="number" 
+                    name="gotoPageNum" 
+                    value={gotoPageNum}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        console.log(gotoPageNum);
+                        popUp=false;
+                        setIsPoppedUp(false);
+                        setGotoPageNum(gotoPageNum);
+                        toRust(false, gotoPageNum);
+                      }
+                    }}
+                    onChange={(e) => {
+                      setGotoPageNum(e.target.value);
+                    }}
+                    required 
+                    autoFocus
+                  />
+                </div>
+            </div>
+          </>
+      )}
+    </>
   );
+  
 }
 
 function SelectBook({ Title, Author, Availability, Edition, Year, Language, coverUri_1, brailleCell }) {
@@ -422,6 +519,12 @@ function SelectBook({ Title, Author, Availability, Edition, Year, Language, cove
               </p>
               <p className="">
                 <span className="font-bold">Tombol 8:</span> Tombol Panggil Bantuan
+              </p>
+              <p className="">
+                <span className="font-bold">Tombol 9:</span> Tombol Mode Legend
+              </p>
+              <p className="">
+                <span className="font-bold">Tombol 10:</span> USB Mode
               </p>
               <p className="">
                 <span className="font-bold">Tombol 22:</span> Logout

@@ -9,10 +9,10 @@
     "BookCover": "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/art-book-cover-design-template-34323b0f0734dccded21e0e3bebf004c_screen.jpg?ts=1637015198",
     "Edition": "3",
     "Langguage": "ENG",
-    "Title": "Si pemimpi - Chapter 4",
+    "Title": "SILAHKAN PILIH BUKU",
     "Year": "2023",
     "avail": "6",
-    "brailleCell": "Si pemimpi - Chapter 4"
+    "brailleCell": "SILAHKAN PILIH BUKU"
   },
   "content_2": {
     "line": 29,
@@ -20,7 +20,8 @@
     "maxPage": 8,
     "page": 2,
     "pageContent": "Dia perempuan yang baik",
-    "titleBook": "Alice in Wonderland - Chapter 2"
+    "titleBook": "Alice in Wonderland - Chapter 2",
+    "popup": false,
   },
   "content_3": {
     "ListBookData": [
@@ -40,5 +41,5 @@
     "status": false,
     "title": "tes"
   },
-  "mode": 3
+  "mode": 1
 }

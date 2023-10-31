@@ -14,6 +14,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             data_from_ui_login,
             data_from_ui_search,
+            data_from_ui_read,
             reset_error_state_from_ui_search,
             reset_error_state_from_ui_login,
             update_ui,
@@ -51,6 +52,16 @@ fn data_from_ui_search(data: &str, status: bool) {
     json["content_3"]["status"] = status.into();
     std::fs::write(INPUT_PATH, serde_json::to_string_pretty(&json).unwrap()).unwrap();
     println!("title: {}", data);
+}
+
+#[tauri::command]
+fn data_from_ui_read(popUp: bool, gotoPage: i32) {
+    let json_in_string = std::fs::read_to_string(INPUT_PATH).unwrap();
+    let mut json = serde_json::from_str::<Value>(&json_in_string).unwrap();
+    json["content_2"]["popup"] = popUp.into();
+    json["content_2"]["gotopage"] = gotoPage.into();
+    std::fs::write(INPUT_PATH, serde_json::to_string_pretty(&json).unwrap()).unwrap();
+    println!("gotopage: {}", gotoPage);
 }
 
 #[tauri::command]
