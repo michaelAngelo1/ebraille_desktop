@@ -14,14 +14,14 @@
     "avail": "6",
     "brailleCell": "SILAHKAN PILIH BUKU"
   },
-  "content_2": {
+  "content_2": {  
     "line": 29,
     "maxLine": 29,
     "maxPage": 8,
     "page": 2,
     "pageContent": "Dia perempuan yang baik",
     "titleBook": "Alice in Wonderland - Chapter 2",
-    "popup": false,
+    "popup": false
   },
   "content_3": {
     "ListBookData": [

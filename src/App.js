@@ -110,6 +110,7 @@ function App() {
 
 export default App;
 
+
 function LoginPage({ nik, error }) {
   const [data, setData] = useState("");
   function toRust(data, status) {
@@ -234,7 +235,6 @@ function SearchBook({ err, ListBookData, indexBookList }) {
             <div className=" w-[80%] h-auto bg-slate-50/20 flex flex-col justify-center items-center rounded-lg p-2 border-2 border-orange-500">
               <h1 className="absolute top-[40px] text-center pl-1 w-full text-indigo-300 text-4xl">Search Book</h1>
               <p className="font-semibold text-2xl text-center  mt-2 cursor-default text-indigo-300">Title</p>
-              // INPUT SEARCHBOOK HERE
               <input
                 type="text"
                 className="text-2xl text-center mt-1 border-b-2 border-black w-[90%] cursor-default bg-transparent focus:outline-none text-white"
@@ -273,9 +273,9 @@ function SearchBook({ err, ListBookData, indexBookList }) {
             <p>
               <span className="font-bold">Tombol 7 :</span> Menampilkan Ketikkan Pengguna
             </p>
-            <p>
+            {/* <p>
               <span className="font-bold">Tombol 8:</span> Tombol Panggil Bantuan
-            </p>
+            </p> */}
             <p>
               <span className="font-bold">Tombol 9:</span> Tombol Mode Legend
             </p>
@@ -360,11 +360,11 @@ function SearchBook({ err, ListBookData, indexBookList }) {
   );
 }
 
-function ReadBook({ text, Title, maxPage, maxLine, pageNow, lineNow, popUp}) {
+function ReadBook({ text, Title, maxPage, maxLine, pageNow, lineNow, popUp, gotoPage}) {
   
   // to Rust
-  function toRust(popUp, gotoPage) {
-    invoke("data_from_ui_read", { popUp, gotoPage });
+  function toRust(gotoPage) {
+    invoke("data_from_ui_read", { gotoPage });
   }
   
   const [buttonMsg, setButtonMsg] = useState("");
@@ -375,25 +375,25 @@ function ReadBook({ text, Title, maxPage, maxLine, pageNow, lineNow, popUp}) {
   const [modalIsOpen, setIsOpen] = useState(false);
   
   // popUp state
-  const [poppedUp, setIsPoppedUp] = useState(popUp);
+  const [_popUp, setIsPopUp] = useState(popUp);
   
   // page state
-  const [gotoPageNum, setGotoPageNum] = useState("");
+  const [_gotoPage, setGotoPage] = useState("");
   
   function afterOpenModal() {
     subtitle.style.color = '#f00';
   }
   
   function closeModal() {
-    setIsPoppedUp(!popUp);
+    setIsPopUp(!_popUp);
   }
   
   const handleSubmitGotoPage = (event) => {
     event.preventDefault();
     
-    if(gotoPageNum > 0) {
+    if(_gotoPage > 0) {
+      toRust(_gotoPage);
       closeModal()
-      setGotoPageNum("");
     }
   }
   
@@ -430,15 +430,15 @@ function ReadBook({ text, Title, maxPage, maxLine, pageNow, lineNow, popUp}) {
               </div>
               <div className="w-3/4 h-full bg-white p-3">
                 <h1 className="text-black font-bold">Button Information:</h1>
-                {poppedUp ? <p>pop up state : tru</p> : <p>pop up state : fals</p> }
+                {_popUp ? <p>pop up state : tru</p> : <p>pop up state : fals</p> }
                 <p>Tombol 1 : Halaman Utama </p>
                 <p>Tombol 3 : Lakukan Bookmark</p>
                 <p>Tombol 4 : Buka Baris Yang Ditandai</p>
                 <p>Tombol 6 : Tampilkan Teks Content Buku</p>
                 <p>Tombol 7 : Tampilkan Informasi Halaman Dan Baris Buku Sekarang</p>
-                <p>Tombol 8 : Tombol Panggil Bantuan</p>
+                {/* <p>Tombol 8 : Tombol Panggil Bantuan</p> */}
                 <p>Tombol 9 : Tombol Mode Legend</p>
-                <p>Tombol 11 : Tombol Go To Page</p>
+                {/* <p>Tombol 11 : Tombol Go To Page</p> */}
                 <p>Tombol 23 : Batalkan Bookmark</p>
                 <p>Tombol 24 : Konfirmasi Bookmark</p>
                 <p>Tombol Atas : Baris Sebelumnya</p>
@@ -454,27 +454,19 @@ function ReadBook({ text, Title, maxPage, maxLine, pageNow, lineNow, popUp}) {
           <>
             <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Enter page you want to jump</h2>
             <div className="form">
+              <form onSubmit={handleSubmitGotoPage}>
                 <div className="input-container">
                   <input 
-                    type="number" 
-                    name="gotoPageNum" 
-                    value={gotoPageNum}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        console.log(gotoPageNum);
-                        popUp=false;
-                        setIsPoppedUp(false);
-                        setGotoPageNum(gotoPageNum);
-                        toRust(false, gotoPageNum);
-                      }
-                    }}
-                    onChange={(e) => {
-                      setGotoPageNum(e.target.value);
-                    }}
-                    required 
+                    type="text" 
                     autoFocus
+                    value={_gotoPage}
+                    onChange={(e) => {
+                      setGotoPage(e.target.value);
+                    }}
+                    required
                   />
                 </div>
+              </form>
             </div>
           </>
       )}
@@ -517,9 +509,9 @@ function SelectBook({ Title, Author, Availability, Edition, Year, Language, cove
               <p className="">
                 <span className="font-bold">Tombol 5:</span> Daftar Bookmark Buku
               </p>
-              <p className="">
+              {/* <p className="">
                 <span className="font-bold">Tombol 8:</span> Tombol Panggil Bantuan
-              </p>
+              </p> */}
               <p className="">
                 <span className="font-bold">Tombol 9:</span> Tombol Mode Legend
               </p>

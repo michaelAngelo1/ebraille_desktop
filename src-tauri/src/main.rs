@@ -55,11 +55,11 @@ fn data_from_ui_search(data: &str, status: bool) {
 }
 
 #[tauri::command]
-fn data_from_ui_read(popUp: bool, gotoPage: i32) {
+fn data_from_ui_read(gotoPage: &str) {
     let json_in_string = std::fs::read_to_string(INPUT_PATH).unwrap();
     let mut json = serde_json::from_str::<Value>(&json_in_string).unwrap();
-    json["content_2"]["popup"] = popUp.into();
     json["content_2"]["gotopage"] = gotoPage.into();
+    json["content_2"]["popup"] = false.into();
     std::fs::write(INPUT_PATH, serde_json::to_string_pretty(&json).unwrap()).unwrap();
     println!("gotopage: {}", gotoPage);
 }
